@@ -1,0 +1,248 @@
+﻿<Window
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+   
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lab01"
+        xmlns:Entity_Data_Modells="clr-namespace:Lab01.Entity_Data_Modells" x:Class="Lab01.MainWindow"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance local:MainWindow}"
+        Title="MainWindow" Height="534" Width="1228" Loaded="Window_Loaded">
+    <Window.Resources>
+        <CollectionViewSource x:Key="weatherEntryViewSource" d:DesignSource="{d:DesignInstance {x:Type Entity_Data_Modells:WeatherEntry}, CreateList=True}"/>
+        <CollectionViewSource x:Key="weatherEntitiesViewSource" d:DesignSource="{d:DesignInstance {x:Type Entity_Data_Modells:WeatherEntities}, CreateList=True}"/>
+        <CollectionViewSource x:Key="weatherEntitiesWeatherEntriesViewSource" Source="{Binding WeatherEntries, Source={StaticResource weatherEntitiesViewSource}}"/>
+        <CollectionViewSource x:Key="personViewSource" d:DesignSource="{d:DesignInstance {x:Type local:Person}, CreateList=True}"/>
+    </Window.Resources>
+
+
+
+    <Grid Background="BurlyWood">
+        <StackPanel>
+            <Grid Height="504">
+                <Grid.Resources>
+                    <Style TargetType="{x:Type Button}" xml:lang="en-GB">
+                        <Setter Property="BorderBrush" Value="YellowGreen" />
+                        <Setter Property="Background" Value="LightGreen" />
+                        <Setter Property="Margin" Value="2" />
+                    </Style>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="3*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="54*"/>
+                    <ColumnDefinition Width="314*"/>
+                    <ColumnDefinition Width="141*"/>
+                    <ColumnDefinition Width="93*"/>
+                    <ColumnDefinition Width="298*"/>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="316*"/>
+                </Grid.ColumnDefinitions>
+
+                <ListBox Margin="20,20,86,20" ItemsSource="{Binding Items}" SelectionChanged="ListBox_SelectionChanged" Grid.RowSpan="2" Grid.ColumnSpan="2">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=Name}" Width="100"/>
+                                <TextBlock Text="{Binding Path=Age}" Width="100"/>
+                                <Button Name = "ShowImageButton" Click="ShowPictureButton_Click">
+                                    <Image Source="{Binding Path =Filename}" Width="20"  />
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <!--<ListView
+                    ItemsSource="{Binding Items}" HorizontalAlignment="Left" Width="282">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn
+                                DisplayMemberBinding="{Binding Path = Name}"
+                                Header="Name" />
+                            <GridViewColumn
+                                DisplayMemberBinding="{Binding Path=Age}"
+                                Header="Age" />
+                            <GridViewColumn
+                                DisplayMemberBinding="{Binding Path=Filename}"
+                                Header="Button" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>-->
+                <StackPanel Grid.Column="4" Margin="5,20,0,20" Orientation="Vertical" Grid.RowSpan="2">
+
+                    <StackPanel>
+
+                        <TextBox 
+                             Name ="nameTextBox" 
+                             Margin="5"
+                             Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+                             VerticalAlignment="Top"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             MaxWidth="400"
+                             materialDesign:HintAssist.Hint="Print your name!"
+                             IsEnabled="{Binding Path=IsChecked, ElementName=MaterialDesignFilledTextFieldTextBoxEnabledComboBox}" />
+                    </StackPanel>
+                    <StackPanel>
+
+                        <TextBox Name="ageTextBox" Margin="5"
+                        Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+                        VerticalAlignment="Top"
+                        AcceptsReturn="True"
+                        TextWrapping="Wrap"
+                        MaxWidth="400"
+                        materialDesign:HintAssist.Hint="Print your age!"
+                        IsEnabled="{Binding Path=IsChecked, ElementName=MaterialDesignFilledTextFieldTextBoxEnabledComboBox}" />
+                    </StackPanel>
+
+                    <Grid
+                        Width="160" Margin="5">
+                        <Button
+                            Name ="loadPictureButton"  Content="Load picture"  Click="AddPictureButton_Click"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            materialDesign:ButtonProgressAssist.Value="-1"
+                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                            
+                            Margin="2,0" />
+                    </Grid>
+                    <Button Margin="10"
+                            Name="addNewPersonButton"
+                            Click="AddNewPersonButton_Click"
+                            
+                            Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                            Width="160"
+                            ToolTip="Resource name: MaterialDesignRaisedAccentButton"
+                            materialDesign:RippleAssist.Feedback="#DD000000">
+                        ADD NEW PERSON
+                    </Button>
+
+
+                    <Button Name="addTextFromWeb" Content="Load text" Click="AddTextButton_Click"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        Width="300"
+                        ToolTip="Resource name: MaterialDesignRaisedLightDarkButton">
+
+                    </Button>
+
+
+
+                    <ProgressBar Height="10" Margin="10,5,9.8,5" Maximum="100" Minimum="0" x:Name ="progressBar"/>
+                    <Button Margin="5"  x:Name="weatherDataButton" Content="Load weather data from known location" Click="LoadWeatherData"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        Width="300"
+                        ToolTip="Resource name: MaterialDesignRaisedLightDarkButton">
+
+                    </Button>
+
+                    <ProgressBar x:Name="weatherDataProgressBar" Height="10"/>
+
+
+
+                    <TextBlock x:Name="weatherDataTextBlock" />
+                    <Button 
+                        Content="CANCEL" Click="Button_Click_1"
+                        Style="{StaticResource MaterialDesignFlatButton }"
+                        ToolTip="MaterialDesignFlatButton">
+
+                    </Button>
+                    <TextBlock
+                        Margin="24 0 0 0"
+                        VerticalAlignment="Center">
+                        Click to draw graphs
+                    </TextBlock>
+                    <Button
+                        
+                        Click="DrawGraphButton_Click"
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                        Margin="8 0 0 0"
+                        Command="{Binding SaveCommand}"
+                        materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsSaving}"
+                        materialDesign:ButtonProgressAssist.Value="{Binding SaveProgress}">
+                        <!-- simple example of toggling/animating pack icon with a data trigger-->
+                        <materialDesign:PackIcon
+                            Height="24"
+                            Width="24">
+                            <materialDesign:PackIcon.Style>
+                                <Style
+                                    TargetType="materialDesign:PackIcon"
+                                    BasedOn="{StaticResource {x:Type materialDesign:PackIcon}}">
+                                    <Setter
+                                        Property="Kind"
+                                        Value="CloudSync" />
+                                    <Style.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding IsSaveComplete}"
+                                            Value="True">
+                                            <Setter
+                                                Property="Kind"
+                                                Value="Check" />
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation
+                                                            Storyboard.TargetProperty="Opacity"
+                                                            From="0"
+                                                            To="1"
+                                                            Duration="0:0:0.8" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </materialDesign:PackIcon.Style>
+                        </materialDesign:PackIcon>
+                    </Button>
+
+                </StackPanel>
+
+                <Grid x:Name="grid1" VerticalAlignment="Top" Margin="72,28,0,0" HorizontalAlignment="Left" Grid.Column="6" Width="235" Height="64">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="22"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Label VerticalAlignment="Center" Grid.Row="0" Margin="3,3,0,3" HorizontalAlignment="Left" Grid.Column="0" Content="City:" Grid.RowSpan="2"/>
+
+
+                    <TextBox x:Name="cityTextBox" Width="120" VerticalAlignment="Center"  Grid.Row="0" Margin="3,4,0,4" Height="24" HorizontalAlignment="Left" Grid.Column="1" Grid.RowSpan="2"/>
+                    <Label VerticalAlignment="Center" Grid.Row="2" Margin="3,3,0,3" HorizontalAlignment="Left" Grid.Column="0" Content="Id:"/>
+                    <TextBox x:Name="idTextBox" Width="120" VerticalAlignment="Center"  Grid.Row="2" Margin="3,4,0,4" Height="24" HorizontalAlignment="Left" Grid.Column="1"/>
+
+                </Grid>
+
+                <Button Content="Button" Grid.Column="6" HorizontalAlignment="Left" Margin="140,97,0,0" VerticalAlignment="Top" Width="74" Click="LoadCityTemp_Click" RenderTransformOrigin="0.413,-2.975" Height="25"/>
+                <DataGrid x:Name="weatherEntryDataGrid" AutoGenerateColumns="False" Grid.Column="6" EnableRowVirtualization="True" ItemsSource="{Binding Source={StaticResource weatherEntryViewSource}}" Margin="88,167,10,20" RowDetailsVisibilityMode="VisibleWhenSelected" Grid.RowSpan="2">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn x:Name="cityColumn1" Binding="{Binding City}" Header="City" Width="90"/>
+                        <DataGridTextColumn x:Name="idColumn1" Binding="{Binding Id}" Header="Id" Width="SizeToHeader"/>
+                        <DataGridTextColumn x:Name="temperatureColumn1" Binding="{Binding Temperature}" Header="Temperature" Width="SizeToHeader"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Image Name="myImage" HorizontalAlignment="Left" Height="120" Margin="88,262,0,0" VerticalAlignment="Top" Width="157" RenderTransformOrigin="1.025,0.471" Grid.Column="6" Grid.RowSpan="2"/>
+                <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Left" Margin="228,153,0,90" Grid.ColumnSpan="3" Grid.RowSpan="2" Grid.Column="1">
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Title="Salesman" Labels="{Binding Labels}"></lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis Title="Sold Apps" LabelFormatter="{Binding Formatter}"></lvc:Axis>
+                    </lvc:CartesianChart.AxisY>
+                </lvc:CartesianChart>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>
